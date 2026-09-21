@@ -21,7 +21,6 @@ export const Footer = () => {
                     ENDLESS Moments
                   </span>
                   <span className="text-[#D4AF37] text-[7px] font-bold uppercase tracking-widest font-mono leading-none mt-0.5">
-                    Photography
                   </span>
                 </div>
               </div>
@@ -120,7 +119,7 @@ export const Footer = () => {
         <div className="border-t border-[#2A2A2A] pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-600">
           <p>© {new Date().getFullYear()} ENDLESS Moments. All rights reserved.</p>
           <p className="mt-2 sm:mt-0 font-mono tracking-widest text-[#666] text-[10px] uppercase">
-            Capture your moments • ENDLESS Moments
+            ENDLESS Moments • Capture your moments 
           </p>
         </div>
       </div>

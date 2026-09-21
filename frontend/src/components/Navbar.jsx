@@ -31,8 +31,8 @@ export const Navbar = () => {
             <div className="flex items-center space-x-1.5 sm:space-x-2" id="segmented_brand_badge">
               {/* ENDLESS Moments Pill */}
               <div className="px-2.5 py-1 bg-[#141414]/80 border border-[#2A2A2A] rounded-lg flex flex-col justify-center items-center text-center shadow-md transition-all duration-300 group-hover:border-[#D4AF37]/30 group-hover:bg-[#D4AF37]/5">
-                <span className="font-serif italic text-xs sm:text-sm font-medium text-[#F5F5F5] tracking-wide leading-tight">ENDLESS</span>
-                <span className="text-[#D4AF37] text-[7px] sm:text-[8px] font-bold uppercase tracking-widest font-mono leading-none mt-0.5">Moments</span>
+                <span className="font-serif italic text-xs sm:text-sm font-medium text-[#F5F5F5] tracking-wide leading-tight">ENDLESS Moments</span>
+                <span className="text-[#D4AF37] text-[7px] sm:text-[8px] font-bold uppercase tracking-widest font-mono leading-none mt-0.5">Capture your Moments</span>
               </div>
               
               {/* Amperstand Separator */}
