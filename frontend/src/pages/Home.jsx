@@ -364,7 +364,7 @@ export const Home = () => {
                     </Link>
 
                     <Link
-                      to={`/projects/${service.slug}`}
+                      to={`/projects?category=${service.slug}`}
                       className="flex items-center justify-between px-4 py-3 bg-[#0F0F0F] border border-[#2A2A2A] text-gray-300 rounded-sm text-[10px] font-bold uppercase tracking-wider hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors"
                     >
                       <span>View Projects in Category</span>
