@@ -1,0 +1,2 @@
+import {Router} from 'express';import {createBooking,getBookings,updateBooking,getAvailability} from '../controllers/bookingController.js';import {authMiddleware} from '../middleware/authMiddleware.js';
+const r=Router();r.post('/',createBooking);r.get('/',authMiddleware,getBookings);r.put('/:id',authMiddleware,updateBooking);r.get('/availability/list',authMiddleware,getAvailability);export default r;

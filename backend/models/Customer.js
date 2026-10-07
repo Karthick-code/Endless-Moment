@@ -1,0 +1,6 @@
+import mongoose,{Schema} from 'mongoose';
+import {getDbState,readLocalFile,writeLocalFile} from '../config/db.js';
+const S=new Schema({name:{type:String,required:true},email:{type:String,required:true},phone:{type:String,required:true},alternatePhone:String,city:String,notes:String,active:{type:Boolean,default:true},createdAt:{type:Date,default:Date.now},updatedAt:{type:Date,default:Date.now}});
+const M=mongoose.models.Customer||mongoose.model('Customer',S);
+export const CustomerRepo={find:async()=>getDbState()?M.find().sort({createdAt:-1}):readLocalFile('customers.json'),create:async d=>getDbState()?M.create(d):localCreate(d),update:async(id,d)=>getDbState()?M.findByIdAndUpdate(id,{$set:{...d,updatedAt:new Date()}},{new:true}):localUpdate(id,d),remove:async id=>getDbState()?M.findByIdAndUpdate(id,{active:false},{new:true}):localUpdate(id,{active:false})};
+function localCreate(d){const a=readLocalFile('customers.json');const x={...d,_id:`c_${Date.now()}`,createdAt:new Date(),updatedAt:new Date()};a.push(x);writeLocalFile('customers.json',a);return x} function localUpdate(id,d){const a=readLocalFile('customers.json');const i=a.findIndex(x=>x._id===id);if(i<0)return null;a[i]={...a[i],...d,updatedAt:new Date()};writeLocalFile('customers.json',a);return a[i]}

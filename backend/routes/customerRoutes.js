@@ -1,0 +1,1 @@
+import {Router} from 'express';import {authMiddleware} from '../middleware/authMiddleware.js';import {getCustomers,createCustomer,updateCustomer,deleteCustomer} from '../controllers/customerController.js';const r=Router();r.use(authMiddleware);r.get('/',getCustomers);r.post('/',createCustomer);r.put('/:id',updateCustomer);r.delete('/:id',deleteCustomer);export default r;

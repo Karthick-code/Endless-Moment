@@ -1,0 +1,1 @@
+import {Router} from 'express';import {authMiddleware} from '../middleware/authMiddleware.js';import {listAvailability,createAvailability,deleteAvailability} from '../controllers/availabilityController.js';const r=Router();r.use(authMiddleware);r.get('/',listAvailability);r.post('/',createAvailability);r.delete('/:id',deleteAvailability);export default r;
