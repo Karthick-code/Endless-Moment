@@ -1,13 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 import { getDbState, readLocalFile, writeLocalFile } from '../config/db.js';
 
-const SelectionSchema = new Schema({ group: String, name: String, value: String }, { _id: false });
+const SelectionSchema = new Schema({ subServiceId: String, subServiceName: String, group: String, name: String, value: String }, { _id: false });
+const SubServiceSelectionSchema = new Schema({ subServiceId: String, name: String }, { _id: false });
 const TimelineSchema = new Schema({ action: String, description: String, performedBy: String, timestamp: { type: Date, default: Date.now }, previousStatus: String, newStatus: String }, { _id: false });
 const BookingSchema = new Schema({
   bookingId: { type: String, unique: true },
   customer: { name: String, email: String, phone: String, alternatePhone: String },
   service: { serviceId: String, name: String, slug: String },
+  // Kept for backwards compatibility; contains the first selected service.
   subService: { subServiceId: String, name: String },
+  // Full multi-selection made by the customer.
+  subServices: [SubServiceSelectionSchema],
   package: { packageId: String, name: String },
   selections: [SelectionSchema],
   addOns: [SelectionSchema],

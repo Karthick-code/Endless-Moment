@@ -6,16 +6,19 @@ import {notifyNewEnquiry} from '../services/notifications/index.js';
 const statuses=['REQUESTED','UNDER_REVIEW','CONFLICT_REQUEST','QUOTED','CUSTOMER_CONFIRMATION','CONFIRMED','COMPLETED','CANCELLED','REJECTED'];
 const conflictStatuses=['REQUESTED','UNDER_REVIEW','CONFLICT_REQUEST','QUOTED','CUSTOMER_CONFIRMATION','CONFIRMED'];
 export const createBooking=async(req,res)=>{try{
- const {customer,service,subService,package:pkg,selections=[],addOns=[],event}=req.body;
- if(!customer?.name||!customer?.email||!customer?.phone||!service?.name||!event?.date){return res.status(400).json({msg:'Name, email, phone, service and preferred date are required.'})}
+ const {customer,service,subService,subServices=[],package:pkg,selections=[],addOns=[],event}=req.body;
+ const selectedSubServices = Array.isArray(subServices) && subServices.length
+   ? subServices
+   : (subService ? [subService] : []);
+ if(!customer?.name||!customer?.email||!customer?.phone||!service?.name||!event?.date||!selectedSubServices.length){return res.status(400).json({msg:'Name, email, phone, category, at least one service and preferred date are required.'})}
  const sameDay=await BookingRepo.find({});
  const active=sameDay.filter(b=>['REQUESTED','UNDER_REVIEW','CONFLICT_REQUEST','QUOTED','CUSTOMER_CONFIRMATION','CONFIRMED'].includes(b.status)&&b.event?.date===event.date);
  const conflict=active.some(b=>timesOverlap(b.event?.startTime,b.event?.endTime,event.startTime,event.endTime));
  const status=conflict?'CONFLICT_REQUEST':'REQUESTED';
  const timeline=[{action:'BOOKING_CREATED',description:conflict?'Request created for an occupied/overlapping slot.':'Booking request received.',performedBy:'customer',newStatus:status}];
- const booking=await BookingRepo.create({customer,service,subService,package:pkg,selections,addOns,event,status,conflict,timeline});
+ const booking=await BookingRepo.create({customer,service,subService:selectedSubServices[0],subServices:selectedSubServices,package:pkg,selections,addOns,event,status,conflict,timeline});
  const existing=await CustomerRepo.find();const found=existing.find(c=>c.email===customer.email||c.phone===customer.phone);if(!found)await CustomerRepo.create(customer);
- notifyNewEnquiry({name:customer.name,email:customer.email,phone:customer.phone,message:`New booking ${booking.bookingId}: ${service.name}${subService?.name?` / ${subService.name}`:''}`}).catch(()=>{});
+ notifyNewEnquiry({name:customer.name,email:customer.email,phone:customer.phone,message:`New booking ${booking.bookingId}: ${service.name} / ${selectedSubServices.map(item=>item.name).join(', ')}`}).catch(()=>{});
  res.status(201).json(booking);
 }catch(e){res.status(500).json({msg:'Could not create booking.',error:e.message})}};
 function timesOverlap(a,b,c,d){if(!a||!c)return true;const toMin=x=>{const [h,m]=x.split(':').map(Number);return h*60+m};const A=toMin(a),B=toMin(b||a),C=toMin(c),D=toMin(d||c);return A<D&&C<B}
